@@ -1,7 +1,28 @@
 #!/bin/bash
 
 # macOS Machine Setup Script
-# This script installs all tools and applications using Homebrew
+# This script installs all tools and applications using Homebrew Bundle
+#
+# USAGE:
+#   ./setup-mac.sh                 # Run the full setup
+#
+# WHAT THIS SCRIPT DOES:
+#   1. Installs Homebrew (if not already installed)
+#   2. Updates Homebrew to latest version
+#   3. Installs all packages defined in Brewfile
+#   4. Configures fzf shell integration
+#   5. Displays manual setup instructions
+#
+# IDEMPOTENT:
+#   This script is safe to run multiple times. It will only install
+#   missing packages and skip already configured items.
+#
+# MANAGING PACKAGES:
+#   - Add packages: Edit Brewfile and run ./setup-mac.sh
+#   - Remove packages: Remove from Brewfile, then run:
+#     brew bundle cleanup
+#   - See what's installed: brew bundle list
+#   - Check status: brew bundle check
 
 set -e  # Exit on error
 
@@ -21,115 +42,19 @@ echo "🔄 Updating Homebrew..."
 brew update
 
 echo ""
-echo "📱 Installing Applications..."
-
-# Security & Password Management
-echo "Installing 1Password..."
-brew install --cask 1password
-
-echo "Installing KeePassXC..."
-brew install --cask keepassxc
-
-# Terminal
-echo "Installing Ghostty..."
-brew install --cask ghostty
-
-# Note Taking
-echo "Installing Obsidian..."
-brew install --cask obsidian
-
-# API Testing
-echo "Installing Bruno..."
-brew install bruno
-
-# Code Editors & IDEs
-echo "Installing Cursor..."
-brew install --cask cursor
-
-echo "Installing VS Code..."
-brew install --cask visual-studio-code
-
-echo "Installing Rider..."
-brew install --cask rider
-
-# Browsers
-echo "Installing Brave Browser..."
-brew install --cask brave-browser
-
-echo "Installing Google Chrome..."
-brew install --cask google-chrome
-
-# Communication
-echo "Installing Slack..."
-brew install --cask slack
-
-echo "Installing WhatsApp..."
-brew install --cask whatsapp
-
-# Productivity
-echo "Installing Todoist..."
-brew install --cask todoist-app
-
-echo "Installing Google Drive..."
-brew install --cask google-drive
-
-# Containerization
-echo "Installing Podman Desktop..."
-brew install --cask podman-desktop
-
-# Version Control
-echo "Installing SourceTree..."
-brew install --cask sourcetree
-
-echo "Installing GitHub Desktop..."
-brew install --cask github
-
-# Database Tools
-echo "Installing Beekeeper Studio..."
-brew install --cask beekeeper-studio
+echo "📦 Installing packages from Brewfile..."
+brew bundle --file="$(dirname "$0")/Brewfile"
 
 echo ""
-echo "🛠️  Installing Development Tools..."
+echo "🔧 Setting up additional tools..."
 
-# Cloud CLIs
-echo "Installing Azure CLI..."
-brew install azure-cli
-
-echo "Installing gCloud CLI..."
-brew install --cask google-cloud-sdk
-
-echo "Installing GitHub CLI..."
-brew install gh
-
-# Infrastructure as Code
-echo "Installing Terraform..."
-brew tap hashicorp/tap
-brew install hashicorp/tap/terraform
-
-# .NET Development
-echo "Installing .NET SDK..."
-brew install --cask dotnet-sdk
-brew install --cask dotnet-sdk@8
-
-# Microservices
-echo "Installing Dapr CLI..."
-brew install dapr/tap/dapr-cli
-
-# Runtime & Package Managers
-echo "Installing Node.js (includes npm and npx)..."
-brew install node
-
-echo "Installing uv (for uvx commands)..."
-brew install uv
-
-echo ""
-echo "🔧 Installing Additional Tools..."
-
-# Fuzzy Finder
-echo "Installing fzf..."
-brew install fzf
-# Run fzf install script for shell integration
-$(brew --prefix)/opt/fzf/install --all
+# Fuzzy Finder - Shell integration
+if [ ! -f ~/.fzf.zsh ] && [ ! -f ~/.fzf.bash ]; then
+    echo "Setting up fzf shell integration..."
+    $(brew --prefix)/opt/fzf/install --all
+else
+    echo "✅ fzf shell integration already configured"
+fi
 
 echo ""
 echo "📝 Manual Setup Required:"
