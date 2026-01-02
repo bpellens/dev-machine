@@ -111,10 +111,6 @@ echo "Installing .NET SDK..."
 brew install --cask dotnet-sdk
 brew install --cask dotnet-sdk@8
 
-# API Tools
-echo "Installing Kiota..."
-brew install kiota
-
 # Microservices
 echo "Installing Dapr CLI..."
 brew install dapr/tap/dapr-cli
@@ -125,10 +121,6 @@ brew install node
 
 echo "Installing uv (for uvx commands)..."
 brew install uv
-
-# Database Tools
-echo "Installing MCP Toolbox..."
-brew install mcp-toolbox
 
 echo ""
 echo "🔧 Installing Additional Tools..."
